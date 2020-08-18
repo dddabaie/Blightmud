@@ -7,18 +7,19 @@ use std::fmt;
 use std::path::PathBuf;
 
 #[derive(Debug, PartialEq, Deserialize, Serialize, Clone)]
-pub struct Connection {
+pub struct ConnectionDetails {
     pub host: String,
     pub port: u16,
+    pub tls: bool,
 }
 
-impl fmt::Display for Connection {
+impl fmt::Display for ConnectionDetails {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Host: {}, Port: {}", self.host, self.port)
     }
 }
 
-pub type Servers = HashMap<String, Connection>;
+pub type Servers = HashMap<String, ConnectionDetails>;
 
 impl SaveData for Servers {
     fn relative_path() -> PathBuf {

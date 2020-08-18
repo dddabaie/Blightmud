@@ -1,5 +1,5 @@
 use crate::event::Event;
-use crate::model::{Connection, Line};
+use crate::model::{ConnectionDetails, Line};
 use crate::{lua::LuaScript, lua::UiEvent, session::Session};
 use log::debug;
 use rs_complete::CompletionTree;
@@ -361,7 +361,7 @@ fn parse_command(msg: &str) -> Event {
             } else {
                 let host = p1.unwrap().to_string();
                 if let Ok(port) = p2.unwrap().parse::<u16>() {
-                    Event::Connect(Connection { host, port })
+                    Event::Connect(ConnectionDetails { host, port, tls: false })
                 } else {
                     Event::Error(
                         "USAGE: /connect <host: String> <port: Positive number>".to_string(),
@@ -386,7 +386,7 @@ fn parse_command(msg: &str) -> Event {
                 let host = p2.unwrap().to_string();
 
                 if let Ok(port) = p3.unwrap().parse::<u16>() {
-                    Event::AddServer(name, Connection { host, port })
+                    Event::AddServer(name, ConnectionDetails { host, port, tls: false })
                 } else {
                     Event::Error(
                         "USAGE: /add_server <name: String> <host: String> <port: Positive number>"

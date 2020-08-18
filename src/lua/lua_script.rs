@@ -323,7 +323,7 @@ mod lua_script_tests {
     use super::LuaScript;
     use crate::{
         event::Event,
-        model::{Connection, Line},
+        model::{ConnectionDetails, Line},
         PROJECT_NAME, VERSION,
     };
     use rlua::Result as LuaResult;
@@ -551,7 +551,7 @@ mod lua_script_tests {
     fn test_connect() {
         assert_event(
             "blight:connect(\"hostname\", 99)",
-            Event::Connect(Connection {
+            Event::Connect(ConnectionDetails {
                 host: "hostname".to_string(),
                 port: 99,
             }),

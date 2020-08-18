@@ -1,6 +1,6 @@
 use crate::{
     io::SaveData,
-    model::{Connection, Line, Servers},
+    model::{ConnectionDetails, Line, Servers},
     net::{spawn_receive_thread, spawn_transmit_thread},
     session::Session,
     ui::Screen,
@@ -27,11 +27,11 @@ pub enum Event {
     Error(String),
     Info(String),
     UserInputBuffer(String, usize),
-    Connect(Connection),
+    Connect(ConnectionDetails),
     Connected,
     Disconnect(u16),
     Reconnect,
-    AddServer(String, Connection),
+    AddServer(String, ConnectionDetails),
     RemoveServer(String),
     LoadServer(String),
     ListServers,
@@ -132,7 +132,7 @@ impl EventHandler {
                 }
                 Ok(())
             }
-            Event::Connect(Connection { host, port }) => {
+            Event::Connect(ConnectionDetails { host, port, tls: _ }) => {
                 self.session.disconnect();
                 if self.session.connect(&host, port) {
                     let (writer, reader): (Sender<TelnetData>, Receiver<TelnetData>) = channel();
@@ -186,7 +186,7 @@ impl EventHandler {
                 if !host.is_empty() && !port > 0 {
                     self.session
                         .main_writer
-                        .send(Event::Connect(Connection { host, port }))?;
+                        .send(Event::Connect(ConnectionDetails { host, port, tls: false }))?;
                 } else {
                     screen.print_error("Reconnect to what?");
                 }

@@ -2,7 +2,7 @@ use super::{constants::*, store_data::StoreData, util::output_stack_trace, UiEve
 use crate::event::Event;
 use crate::{
     io::SaveData,
-    model::{Connection, Line},
+    model::{ConnectionDetails, Line},
     PROJECT_NAME, VERSION,
 };
 use anyhow::Result;
@@ -137,7 +137,7 @@ impl UserData for BlightMud {
         });
         methods.add_method("connect", |_, this, (host, port): (String, u16)| {
             this.main_writer
-                .send(Event::Connect(Connection { host, port }))
+                .send(Event::Connect(ConnectionDetails { host, port, tls: false }))
                 .unwrap();
             Ok(())
         });

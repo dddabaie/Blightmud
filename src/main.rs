@@ -30,7 +30,7 @@ use crate::timer::{spawn_timer_thread, TimerEvent};
 use crate::ui::{spawn_input_thread, Screen};
 use event::EventHandler;
 use getopts::Options;
-use model::{Connection, Settings, ECHO_GMCP, LOGGING_ENABLED};
+use model::{ConnectionDetails, Settings, ECHO_GMCP, LOGGING_ENABLED};
 use net::check_latest_version;
 use tools::register_panic_hook;
 
@@ -137,7 +137,7 @@ fn main() {
             let host = split[0].to_string();
             let port: u16 = split[1].parse().unwrap();
             main_writer
-                .send(Event::Connect(Connection { host, port }))
+                .send(Event::Connect(ConnectionDetails { host, port, tls: false }))
                 .unwrap();
         } else {
             print_help(program, opts);
